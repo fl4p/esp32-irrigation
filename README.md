@@ -16,3 +16,5 @@
 * ads1115 sensors and deep sleep https://gist.github.com/kdorff/eb3d7a850cb6c20e440430722368fb2f
 * esphome smt100 https://esphome.io/components/sensor/smt100.html#smt100-soil-moisture-sensor [code](https://github.com/esphome/esphome/tree/dev/esphome/components/smt100) [doc src](https://github.com/esphome/esphome-docs/blob/current/components/sensor/smt100.rst)
 * smt100 low voltage UART [AN007](https://www.truebner.de/assets/download/AN007.pdf)
+* the esphome compoent for the smt100 uses `GetAllMeasurements!` which doesn't work and is not documented in the ASCII protocol PDF AN005 file:///Users/fab/Downloads/AN005.pdf
+* https://esphome.io/cookbook/lambda_magic.html?highlight=uart#custom-uart-text-sensor
