@@ -1,0 +1,82 @@
+esphome:
+  name: esphome-web-9985a4
+  friendly_name: esp32s3-devy
+  includes:
+    - uart_sensor.h
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "VGOBr43kM+9fjbASwKCcF6rXdcZ3+Wf0JAmIVWOa3RY="
+
+ota:
+
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Esphome-Web-9985A4"
+    password: "mzjW1JQPcx3N"
+
+captive_portal:
+
+
+# Example configuration entry
+uart:
+
+  tx_pin: 10
+  rx_pin: 11
+  baud_rate: 9600
+  id: uart_bus
+
+custom_component:
+- lambda: |-
+    auto uart_query = new Uart(id(uart_bus));
+    App.register_component(uart_query);
+    return {uart_query};
+  id: uart_query
+
+
+sensor:
+  - platform: custom
+    lambda: |-
+      std::vector<esphome::sensor::Sensor*> v;
+      v.push_back(new UartPollingSensor("GetTemperature!", 15000));
+      v.push_back(new UartPollingSensor("GetWaterContent!", 15000));
+      v.push_back(new UartPollingSensor("GetCounts!", 15000));
+      v.push_back(new UartPollingSensor("GetPermittivity!", 15000));
+      for(auto c :v) App.register_component((UartPollingSensor*)c);
+      return v;
+
+    sensors:
+      - name: "Temperature"
+        unit_of_measurement: ºC
+        accuracy_decimals: 1
+
+      - name: "WaterContent"
+        unit_of_measurement: "%"
+        accuracy_decimals: 2
+        # filters:
+          #- lambda: |-
+          #return x > 100 ? NAN : x;
+
+      - name: "Counts"
+        unit_of_measurement: ""
+        accuracy_decimals: 0
+
+      - name: "Permittivity"
+        unit_of_measurement: F/m # farad/meter
+        accuracy_decimals: 2
+
+
